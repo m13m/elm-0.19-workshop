@@ -36,7 +36,11 @@ update msg model =
                 { model | foo = bar }
 
     -}
-    model
+    if msg.description == "ClickedTag" then
+        { model | selectedTag = msg.data }
+
+    else
+        model
 
 
 
@@ -54,7 +58,7 @@ view model =
                     Docs for List.member: http://package.elm-lang.org/packages/elm-lang/core/latest/List#member
         -}
         articles =
-            List.filter (\article -> True)
+            List.filter (\article -> List.member model.selectedTag article.tags)
                 model.allArticles
 
         feed =
@@ -115,6 +119,7 @@ viewTag selectedTagName tagName =
 
                     👆 Don't forget to add a comma before `onClick`!
         -}
+        , onClick { description = "ClickedTag", data = tagName }
         ]
         [ text tagName ]
 
